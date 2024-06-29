@@ -11,13 +11,12 @@
             <do_for_each name="$station" in="$sectorStations">
                 <do_if value="$station.shadyguy" comment="Check shadyguy exists">
                     <append_to_list name="$shadyGuyList" exact="$station" />
-                    <!-- It turns out we can build strings... -->
-                    <set_value name="$stationTexts" operation="add" exact="$station.name + ' (' + $station.idcode + ')\n'" />
+                    <set_value name="$stationTexts" exact="$stationTexts + $station.name + ' (' + $station.idcode + ')\n'" />
                 </do_if>
             </do_for_each>
             <remove_value name="$sectorStations" />
             <!-- Do we have anything here? -->
-            <do_if value="$shadyGuyList">
+            <do_if value="$shadyGuyList != []">
                 <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" />
                 <write_to_logbook category="general" title="$targetspace.name" text="$stationTexts" />
             </do_if>
