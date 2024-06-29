@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="CheckShadyGuy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+    <cues>
+        <cue name="DoCheck" instantiate="true">
+            <conditions>
+                <event_object_signalled object="player.galaxy" param="'checkShadyGuy'" />
+            </conditions>
+            <actions>
+                <!-- Check shadyguys in param2 -->
+                <set_value name="$targetspace" exact="event.param2" />
+                <!-- Find stations with a black market trader -->
+                <!-- No special matching here needed; we will check things in a foreach loop -->
+                <find_station name="$sectorStations" piratebase="false" space="$targetspace" multiple="true" />
+                <create_list name="$shadyGuyList" />
+                <set_value name="$stationTexts" exact="''" />
+                <do_for_each name="$station" in="$sectorStations">
+                    <do_if value="$station.shadyguy" comment="Check shadyguy exists">
+                        <append_to_list name="$shadyGuyList" exact="$station" />
+                        <set_value name="$stationTexts" exact="$stationTexts + $station.name + ' (' + $station.idcode + ')\n'" />
+                    </do_if>
+                </do_for_each>
+                <remove_value name="$sectorStations" />
+                <!-- Do we have anything here? -->
+                <do_if value="$shadyGuyList != []">
+                    <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" />
+                    <write_to_logbook category="general" title="$targetspace.name" text="$stationTexts" />
+                </do_if>
+                <do_else>
+                    <show_help custom="'no shadyguy'" pos="1" duration="5s" />
+                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" />
+                </do_else>
+                <remove_value name="$shadyGuyList" />
+                <remove_value name="$stationTexts" />
+            </actions>
+        </cue>
+    </cues>
+</mdscript>
