@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+    <add sel="/aiscript/attention/actions/label[@name='cleanup']" pos="before">
+        <!-- This means we have successfully completed a "order.move.recon" script. -->
+        <do_if value="this.ship.isplayerowned" comment="Only for the player">
+            <!-- Find stations with a black market trader -->
+            <!-- No special matching here needed; we will check things in a foreach loop -->
+            <find_station name="$sectorStations" piratebase="false" space="$targetspace" multiple="true" />
+            <create_list name="$shadyGuyList" />
+            <set_value name="$stationTexts" exact="''" />
+            <do_for_each name="$station" in="$sectorStations">
+                <do_if value="$station.shadyguy" comment="Check shadyguy exists">
+                    <append_to_list name="$shadyGuyList" exact="$station" />
+                    <!-- It turns out we can build strings... -->
+                    <set_value name="$stationTexts" operation="add" exact="$station.name + ' (' + $station.idcode + ')\n'" />
+                </do_if>
+            </do_for_each>
+            <remove_value name="$sectorStations" />
+            <!-- Do we have anything here? -->
+            <do_if value="$shadyGuyList">
+                <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" />
+                <write_to_logbook category="general" title="$targetspace.name" text="$stationTexts" />
+            </do_if>
+            <do_else>
+                <show_help custom="'no shadyguy'" pos="1" duration="5s" />
+            </do_else>
+            <remove_value name="$shadyGuyList" />
+            <remove_value name="$stationTexts" />
+        </do_if>
+    </add>
+</diff>
