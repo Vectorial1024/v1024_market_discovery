@@ -16,11 +16,9 @@
                 <!-- No special matching here needed; we will check things in a foreach loop -->
                 <find_station name="$sectorStations" piratebase="false" space="$targetspace" multiple="true" />
                 <create_list name="$shadyGuyList" />
-                <set_value name="$stationTexts" exact="''" />
                 <do_for_each name="$station" in="$sectorStations">
                     <do_if value="$station.shadyguy" comment="Check shadyguy exists">
                         <append_to_list name="$shadyGuyList" exact="$station" />
-                        <set_value name="$stationTexts" exact="$stationTexts + $station.name + ' (' + $station.idcode + ')\n'" />
                     </do_if>
                 </do_for_each>
                 <remove_value name="$sectorStations" />
