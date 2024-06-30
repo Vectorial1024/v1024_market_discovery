@@ -8,6 +8,10 @@
             <actions>
                 <!-- Check shadyguys in param2 -->
                 <set_value name="$targetspace" exact="event.param2" />
+                <!-- Ensure shadyguys really exist; this fixes a possible bug in the base game. -->
+                <run_actions ref="EnsureShadyguysExist">
+                    <param name="Sector" value="$targetspace" />
+                </run_actions>
                 <!-- Find stations with a black market trader -->
                 <!-- No special matching here needed; we will check things in a foreach loop -->
                 <find_station name="$sectorStations" piratebase="false" space="$targetspace" multiple="true" />
@@ -23,15 +27,37 @@
                 <!-- Do we have anything here? -->
                 <do_if value="$shadyGuyList != []">
                     <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" />
+                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="100" />
                     <write_to_logbook category="general" title="$targetspace.name" text="$stationTexts" />
                 </do_if>
                 <do_else>
                     <show_help custom="'no shadyguy'" pos="1" duration="5s" />
-                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" />
+                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="100" />
                 </do_else>
                 <remove_value name="$shadyGuyList" />
                 <remove_value name="$stationTexts" />
             </actions>
         </cue>
+
+        <library name="EnsureShadyguysExist" purpose="run_actions">
+            <params>
+                <param name="Sector" comment="The sector to check shadyguys; according to the code, there should be at least 1 shadyguy in each sector..." />
+            </params>
+            <actions>
+                <!-- Basically copied from the vanilla script -->
+                <find_station name="$PossibleStations" piratebase="false" space="$Sector" multiple="true">
+                    <match_products wares="[ware.majadust, ware.spacefuel, ware.spaceweed]" negate="true" />
+                    <match owner="[faction.player, faction.xenon, faction.khaak, faction.ownerless, faction.civilian]" negate="true" />
+                    <match macro="macro.station_pla_headquarters_base_01_macro" negate="true"/>
+                </find_station>
+                <do_if value="$PossibleStations.count == 0">
+                    <!-- Nothing to do -->
+                    <return />
+                </do_if>
+                <!-- There are possible stations here -->
+                <!-- Immediately try to reroll shadyguys; the game will ignore this attempt if shadyguys are already here. -->
+                <signal_cue_instantly cue="md.NPC_ShadyGuy.EvaluateSectors" param="[$Sector]" />
+            </actions>
+        </library>
     </cues>
 </mdscript>
