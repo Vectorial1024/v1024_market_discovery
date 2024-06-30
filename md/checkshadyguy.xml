@@ -25,16 +25,16 @@
                 <!-- Do we have anything here? -->
                 <set_value name="$logbookTitle" exact="'%s @ %s'.[{20208, 10801}, $targetspace.name]" comment="Black Marketeer @ [NAME]" />
                 <do_if value="$shadyGuyList != []">
-                    <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" />
-                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="100" />
+                    <show_help custom="'yes shadyguy, check logbook'" pos="1" duration="5s" chance="0" />
+                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="0" />
                     <!-- For game balance, we will only report a random shadyguy inside the list, and will not check whether the shadyguy is already unlocked. -->
                     <set_value name="$pickedStation" exact="$shadyGuyList.random" />
                     <!-- Station: [NAME] (CODE) -->
                     <write_to_logbook category="general" title="$logbookTitle" text="{1001, 3} + ': ' + $pickedStation.name + ' (' + $pickedStation.idcode + ')'" />
                 </do_if>
                 <do_else>
-                    <show_help custom="'no shadyguy'" pos="1" duration="5s" />
-                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="100" />
+                    <show_help custom="'no shadyguy'" pos="1" duration="5s" chance="0" />
+                    <show_help custom="'for sanity, shadyguys in galaxy: ' + md.$ShadyGuyMap.keys.count" pos="1" duration="5s" chance="0" />
                     <write_to_logbook category="general" title="$logbookTitle" text="{1001, 6526}" comment="No information available" />
                 </do_else>
                 <remove_value name="$shadyGuyList" />
