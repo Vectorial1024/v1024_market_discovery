@@ -2,7 +2,7 @@
 Receive hints about potential black market traders in X4: Foundations.
 
 - Our GitHub repo: https://github.com/Vectorial1024/v1024_market_discovery
-- Our EgoSoft Forums link: (WIP)
+- Our EgoSoft Forums link: https://forum.egosoft.com/viewtopic.php?t=463770
 - Our Steam link: (WIP)
 - Our Nexus link: (WIP)
 
