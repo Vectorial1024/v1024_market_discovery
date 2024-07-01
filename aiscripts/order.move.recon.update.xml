@@ -4,7 +4,7 @@
         <!-- This means we have successfully completed a "order.move.recon" script. -->
         <do_if value="this.ship.isplayerowned" comment="Only for the player">
             <!-- Send signal to dedicated script -->
-            <signal_objects object="player.galaxy" param="'checkShadyGuy'" param2="$targetspace" />
+            <signal_objects object="player.galaxy" param="'checkShadyGuy'" param2="$destination.{1}" />
         </do_if>
     </add>
 </diff>
